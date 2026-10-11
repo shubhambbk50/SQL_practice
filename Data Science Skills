@@ -1,0 +1,22 @@
+https://datalemur.com/questions/matching-skills
+
+Sol 1
+SELECT DISTINCT(candidate_id)
+FROM candidates
+WHERE skill IN ("Python", "Tableau", "PostgreSQL")
+HAVING COUNT(DISTINCT skill) = 3
+ORDER BY candidate_id  ASC;
+
+Sol 2
+SELECT candidate_id
+FROM candidates
+WHERE skill IN ("Python", "Tableau", "PostgreSQL")
+GROUP BY candidate_id
+HAVING COUNT(DISTINCT skill) = 3
+ORDER BY candidate_id  ASC;
+
+Sol 3
+SELECT distinct c1.candidate_id
+from candidates c1 inner join  candidates c2 on c1.candidate_id = c2.candidate_id
+inner join candidates c3 on c2.candidate_id = c3.candidate_id
+where c1.skill ='Python' and c2.skill = 'Tableau' and c3.skill = 'PostgreSQL'
