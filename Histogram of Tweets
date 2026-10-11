@@ -1,0 +1,49 @@
+https://datalemur.com/questions/sql-histogram-tweets
+Sol 1
+WITH CTE AS (
+SELECT * FROM tweets
+WHERE EXTRACT(YEAR FROM tweet_date) = "2022"
+),
+
+CTE2 AS (
+SELECT user_id AS users_num,
+COUNT(tweet_id) AS tweet_bucket
+FROM CTE
+GROUP BY user_id
+)
+
+SELECT tweet_bucket, 
+COUNT(users_num)
+FROM CTE2
+GROUP BY tweet_bucket;
+
+Sol 2
+WITH CTE AS (
+SELECT * FROM tweets
+-- WHERE EXTRACT(YEAR FROM tweet_date) = "2022"
+WHERE YEAR(tweet_date) = "2022"
+),
+
+CTE2 AS (
+SELECT user_id AS users_num,
+COUNT(tweet_id) AS tweet_bucket
+FROM CTE
+GROUP BY user_id
+)
+
+SELECT tweet_bucket, 
+COUNT(users_num)
+FROM CTE2
+GROUP BY tweet_bucket;
+
+Sol 3 
+WITH cte as (
+SELECT user_id, count(user_id) as tweet_bucket
+FROM tweets
+where YEAR(tweet_date) = '2022'
+GROUP BY user_id)
+ 
+select tweet_bucket, count(user_id) as user_nums from cte
+group by tweet_bucket
+order by 1
+ 
