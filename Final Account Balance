@@ -1,0 +1,54 @@
+https://datalemur.com/questions/final-account-balance
+
+Sol1:
+WITH totalDeposit AS (
+  SELECT account_id, SUM(amount) AS totalDepositAmount
+  FROM transactions
+  WHERE transaction_type = 'Deposit'
+  GROUP BY account_id
+),
+
+totalWithdrawal AS(
+  SELECT account_id, SUM(amount) AS totalWithdrawlAmount
+  FROM transactions
+  WHERE transaction_type = 'Withdrawal'
+  GROUP BY account_id  
+)
+
+SELECT d.account_id, 
+d.totalDepositAmount-w.totalWithdrawlAmount AS final_balance
+FROM totalDeposit AS d
+FULL OUTER JOIN totalWithdrawal AS w
+ON d.account_id = w.account_id
+
+Sol2:
+-- WITH totalDeposit AS (
+--   SELECT account_id, SUM(amount) AS totalDepositAmount
+--   FROM transactions
+--   WHERE transaction_type = 'Deposit'
+--   GROUP BY account_id
+-- ),
+
+-- totalWithdrawal AS(
+--   SELECT account_id, SUM(amount) AS totalWithdrawlAmount
+--   FROM transactions
+--   WHERE transaction_type = 'Withdrawal'
+--   GROUP BY account_id  
+-- )
+
+-- SELECT d.account_id, 
+-- d.totalDepositAmount-w.totalWithdrawlAmount AS final_balance
+-- FROM totalDeposit AS d
+-- FULL OUTER JOIN totalWithdrawal AS w
+-- ON d.account_id = w.account_id
+
+
+
+SELECT account_id,
+SUM(CASE
+      WHEN transaction_type = 'Deposit' THEN amount
+      ELSE -amount
+    END
+  ) AS final_balance
+FROM transactions
+GROUP BY account_id
