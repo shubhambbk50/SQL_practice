@@ -1,0 +1,28 @@
+https://datalemur.com/questions/sql-well-paid-employees
+
+Sol1:
+SELECT 
+  a.employee_id,
+  a.name as employee_name
+FROM
+  employee a
+CROSS JOIN
+  employee b
+WHERE
+  a.manager_id = b.employee_id
+AND
+  a.salary > b.salary
+  
+  
+Sol2:
+SELECT 
+  emp.employee_id,
+  emp.name as employee_name
+FROM
+  employee emp
+INNER JOIN
+  employee mgr
+ON
+  emp.manager_id = mgr.employee_id
+AND
+  emp.salary > mgr.salary
