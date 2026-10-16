@@ -1,0 +1,16 @@
+https://datalemur.com/questions/sql-ibm-db2-product-analytics
+
+WITH CTE AS (
+SELECT e.employee_id, count(q.query_id) AS no_of_query
+FROM employees e 
+LEFT JOIN queries q 
+ON e.employee_id = q.employee_id
+AND q.query_starttime >= '2023-07-01 00:00:00' 
+AND q.query_starttime < '2023-10-01 00:00:00'
+GROUP BY e.employee_id
+)
+
+SELECT no_of_query as unique_queries, COUNT(employee_id) AS employee_account
+FROM CTE
+group by no_of_query
+ORDER BY unique_queries
